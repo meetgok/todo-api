@@ -55,6 +55,21 @@ app.post('/todos', function(req, res) {
 	}
 });
 
+app.delete('/todos/:id', function(req, res) {
+	var lv_id = parseInt(req.params.id, 10);
+	if (!_.isNumber(lv_id)) {
+		console.log('completed not numnber');
+		return res.status(400).json({"error" : "id not a number"});
+	}
+	var matchedTodo = _.findWhere(todos, {"id": lv_id});
+	if(matchedTodo){
+		todos = _.without(todos, matchedTodo);
+		res.send(todos);
+	} else{
+		res.status(404).json({"error" : "id not found"});
+	}
+})
+
 app.listen(PORT, function() {
 	console.log('Express listening on port ' + PORT);
 });
